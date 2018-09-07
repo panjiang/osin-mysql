@@ -11,13 +11,14 @@ import (
 	"github.com/RangelReale/osin"
 	"github.com/ansel1/merry"
 	"github.com/felipeweb/gopher-utils"
+
 	// driver for mysql db
 	_ "github.com/go-sql-driver/mysql"
 )
 
 var schemas = []string{`CREATE TABLE IF NOT EXISTS {prefix}client (
-	id           varchar(64) BINARY NOT NULL PRIMARY KEY,
-	secret 		 varchar(64) NOT NULL,
+	app_id           varchar(64) BINARY NOT NULL PRIMARY KEY,
+	app_secret 		 varchar(64) NOT NULL,
 	extra 		 varchar(255) NOT NULL,
 	redirect_uri varchar(255) NOT NULL
 )`, `CREATE TABLE IF NOT EXISTS {prefix}authorize (
@@ -89,7 +90,7 @@ func (s *Storage) Close() {
 
 // GetClient loads the client by id
 func (s *Storage) GetClient(id string) (osin.Client, error) {
-	row := s.db.QueryRow(fmt.Sprintf("SELECT id, secret, redirect_uri, extra FROM %sclient WHERE id=?", s.tablePrefix), id)
+	row := s.db.QueryRow(fmt.Sprintf("SELECT app_id, app_secret, redirect_uri, extra FROM %sclient WHERE app_id=?", s.tablePrefix), id)
 	var c osin.DefaultClient
 	var extra string
 
@@ -106,7 +107,7 @@ func (s *Storage) GetClient(id string) (osin.Client, error) {
 func (s *Storage) UpdateClient(c osin.Client) error {
 	data := gopher_utils.ToStr(c.GetUserData())
 
-	if _, err := s.db.Exec(fmt.Sprintf("UPDATE %sclient SET secret=?, redirect_uri=?, extra=? WHERE id=?", s.tablePrefix), c.GetSecret(), c.GetRedirectUri(), data, c.GetId()); err != nil {
+	if _, err := s.db.Exec(fmt.Sprintf("UPDATE %sclient SET app_secret=?, redirect_uri=?, extra=? WHERE app_id=?", s.tablePrefix), c.GetSecret(), c.GetRedirectUri(), data, c.GetId()); err != nil {
 		return merry.Wrap(err)
 	}
 	return nil
@@ -116,7 +117,7 @@ func (s *Storage) UpdateClient(c osin.Client) error {
 func (s *Storage) CreateClient(c osin.Client) error {
 	data := gopher_utils.ToStr(c.GetUserData())
 
-	if _, err := s.db.Exec(fmt.Sprintf("INSERT INTO %sclient (id, secret, redirect_uri, extra) VALUES (?, ?, ?, ?)", s.tablePrefix), c.GetId(), c.GetSecret(), c.GetRedirectUri(), data); err != nil {
+	if _, err := s.db.Exec(fmt.Sprintf("INSERT INTO %sclient (app_id, secret, redirect_uri, extra) VALUES (?, ?, ?, ?)", s.tablePrefix), c.GetId(), c.GetSecret(), c.GetRedirectUri(), data); err != nil {
 		return merry.Wrap(err)
 	}
 	return nil
@@ -124,7 +125,7 @@ func (s *Storage) CreateClient(c osin.Client) error {
 
 // RemoveClient removes a client (identified by id) from the database. Returns an error if something went wrong.
 func (s *Storage) RemoveClient(id string) (err error) {
-	if _, err = s.db.Exec(fmt.Sprintf("DELETE FROM %sclient WHERE id=?", s.tablePrefix), id); err != nil {
+	if _, err = s.db.Exec(fmt.Sprintf("DELETE FROM %sclient WHERE app_id=?", s.tablePrefix), id); err != nil {
 		return merry.Wrap(err)
 	}
 	return nil
