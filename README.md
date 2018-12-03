@@ -2,7 +2,7 @@
 
 ![Travis](https://travis-ci.org/felipeweb/osin-mysql.svg?branch=master) [![GoDoc](https://godoc.org/github.com/felipeweb/osin-mysql?status.svg)](https://godoc.org/github.com/felipeweb/osin-mysql)
 
-A MySQL storage backend for [osin oauth2](https://github.com/RangelReale/osin).
+A MySQL storage backend for [osin oauth2](https://github.com/panjiang/osin).
 Additional to implementing the `osin.Storage` interface, the `github.com/felipeweb/osin-mysql/storage.Storage` interface defines new methods:
 
 ```
@@ -35,7 +35,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/felipeweb/osin-mysql"
-	"github.com/RangelReale/osin"
+	"github.com/panjiang/osin"
 )
 
 func main() {

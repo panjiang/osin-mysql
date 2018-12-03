@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/RangelReale/osin"
+	"github.com/panjiang/osin"
 	"github.com/ansel1/merry"
 	"github.com/felipeweb/gopher-utils"
 
@@ -53,7 +53,7 @@ var schemas = []string{`CREATE TABLE IF NOT EXISTS {prefix}client (
 )`,
 }
 
-// Storage implements interface "github.com/RangelReale/osin".Storage and interface "github.com/felipeweb/osin-mysql/storage".Storage
+// Storage implements interface "github.com/panjiang/osin".Storage and interface "github.com/felipeweb/osin-mysql/storage".Storage
 type Storage struct {
 	db          *sql.DB
 	tablePrefix string

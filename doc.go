@@ -24,7 +24,7 @@ First, install this library with go get "github.com/felipeweb/osin-mysql".
 	    _ "github.com/go-sql-driver/mysql"
 
 	    "github.com/felipeweb/osin-mysql"
-	    "github.com/RangelReale/osin"
+	    "github.com/panjiang/osin"
 	)
 
 	func main() {
